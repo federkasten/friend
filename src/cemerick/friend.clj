@@ -154,7 +154,7 @@ Equivalent to (complement current-authentication)."}
           resp (response/redirect-after-post
                  (or unauthorized-uri
                      (and (string? redirect) redirect)
-                      (str (:context request) (-> request ::auth-config :default-landing-uri ))))]
+                     (-> request ::auth-config :default-landing-uri )))]
       (if unauthorized-uri
         (-> resp
           (assoc :session (:session request))
@@ -166,7 +166,7 @@ Equivalent to (complement current-authentication)."}
   (-> request
     ::auth-config
     :login-uri
-    (#(str (:context request) %))
+    (#(str %))
     (util/resolve-absolute-uri request)
     ring.util.response/redirect
     (assoc :session (:session request))
@@ -255,8 +255,8 @@ which contains a map to be called with a ring handler."
 (defn throw-unauthorized
   "Throws a slingshot stone (see `slingshot.slingshot/throw+`) containing
    the [authorization-info] map, in addition to these slots:
- 
-   :cemerick.friend/type - the type of authorization failure that has 
+
+   :cemerick.friend/type - the type of authorization failure that has
         occurred, defaults to `:unauthorized`
    :cemerick.friend/identity - the current identity, defaults to the
         provided [identity] argument
@@ -320,7 +320,7 @@ which contains a map to be called with a ring handler."
 
      (authorize #{::user :some.ns/admin}
        {:op-name \"descriptive name for secured operation\"}
-        
+
 
    Note that this macro depends upon the *identity* var being bound to the
    current user's authentications.  This will work fine in e.g. agent sends
